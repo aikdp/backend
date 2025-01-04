@@ -29,19 +29,19 @@ pipeline {
         //         """
         //     }
         // }
-        // stage('Install dependencies') {
-        //     steps {
-        //        sh 'npm install'
-        //     }
-        // }
-        // stage('Build docker image') {
-        //     steps {                         //dot means current directory
-        //         sh """
-        //         docker build -t kdprasad028/backend:${appVersion} .
-        //         docker images
-        //         """
-        //     }
-        // }
+        stage('Install dependencies') {
+            steps {
+               sh 'npm install'
+            }
+        }
+        stage('Build docker image') {
+            steps {                         //dot means current directory
+                sh """
+                docker build -t kdprasad028/backend:${appVersion} .
+                docker images
+                """
+            }
+        }
     }
     post {
         always{
