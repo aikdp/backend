@@ -16,7 +16,7 @@ pipeline {
                script{      //script means groovy scripts
                 def packageJson = readJSON file: 'package.json'
                 appVersion = packageJson.version
-                echo 'App version: ${appVersion}'
+                echo "App version: ${appVersion}"
                }
             }
         }
