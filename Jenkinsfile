@@ -20,28 +20,28 @@ pipeline {
                }
             }
         }
-        // stage{
-        //     steps{
-        //         sh """
-        //         sudo dnf module disable nodejs -y
-        //         sudo dnf module enable nodejs:20 -y
-        //         sudo dnf install nodejs -y
-        //         """
-        //     }
-        // }
-        // stage('Install dependencies') {
-        //     steps {
-        //        sh 'npm install'
-        //     }
-        // }
-        // stage('Build docker image') {
-        //     steps {                         //dot means current directory
-        //         sh """
-        //         docker build -t kdprasad028/backend:${appVersion} .
-        //         docker images
-        //         """
-        //     }
-        // }
+        stage{
+            steps{
+                sh """
+                sudo dnf module disable nodejs -y
+                sudo dnf module enable nodejs:20 -y
+                sudo dnf install nodejs -y
+                """
+            }
+        }
+        stage('Install dependencies') {
+            steps {
+               sh 'npm install'
+            }
+        }
+        stage('Build docker image') {
+            steps {                         //dot means current directory
+                sh """
+                docker build -t kdprasad028/backend:${appVersion} .
+                docker images
+                """
+            }
+        }
     }
     post {
         always{
