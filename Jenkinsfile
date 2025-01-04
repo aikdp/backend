@@ -20,7 +20,7 @@ pipeline {
                }
             }
         }
-        stage{
+        stage('NodeJs'){
             steps{
                 sh """
                 sudo dnf module disable nodejs -y
