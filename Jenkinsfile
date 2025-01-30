@@ -71,7 +71,7 @@ pipeline {
 
                     sed -i 's/IMAGE_VERSION/${appVersion}/g' values-${environment}.yaml 
 
-                    helm upgrade --install ${componenet} -n ${project} -f values-${environment}.yaml .  
+                    helm upgrade --install ${component} -n ${project} -f values-${environment}.yaml .  
 
                     """
                     //dot means current folder of Dockerfile exists
