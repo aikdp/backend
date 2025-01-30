@@ -69,7 +69,7 @@ RUN addgroup -S expense && adduser -S expense -G expense && \
     mkdir /opt/server && \
     chown -R expense:expense /opt/server
 WORKDIR /opt/server
-#below step added only (copied from 1st dockerfile and 1st dockerfile will delete)
+#below step added only (It will copied from 1st dockerfile and 1st dockerfile will delete)
 COPY --from=builder /opt/server /opt/server/        
 USER expense
 CMD ["node", "index.js"]

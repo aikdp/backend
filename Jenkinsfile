@@ -8,6 +8,11 @@ pipeline {
     }
     environment{
         appVersion = ''
+        region = 'us-east-1'
+        account_id = '537124943253'
+        project = 'expense'
+        environment = 'dev'
+        component  = 'backend'
     }
 
     stages {
@@ -20,15 +25,15 @@ pipeline {
                }
             }
         }
-        stage('NodeJs'){
-            steps{
-                sh """
-                sudo dnf module disable nodejs -y
-                sudo dnf module enable nodejs:20 -y
-                sudo dnf install nodejs -y
-                """
-            }
-        }
+        // stage('NodeJs'){
+        //     steps{
+        //         sh """
+        //         sudo dnf module disable nodejs -y
+        //         sudo dnf module enable nodejs:20 -y
+        //         sudo dnf install nodejs -y
+        //         """
+        //     }
+        // }
         stage('Install dependencies') {
             steps {
                sh 'npm install'
@@ -36,10 +41,41 @@ pipeline {
         }
         stage('Build docker image') {
             steps {                         //dot means current directory
-                sh """
-                docker build -t kdprasad028/backend:${appVersion} .
-                docker images
-                """
+                // withAWS(region: 'us-east-1', credentials: 'aws-creds') {
+                //     sh """
+                //     docker build -t kdprasad028/backend:${appVersion} .
+                //     docker images
+                //     """
+                // }
+                withAWS(region: 'us-east-1', credentials: 'aws-creds') {    //please ADD credentials in jenkins site
+                    sh """
+                    aws ecr get-login-password --region ${region} | docker login --username AWS --password-stdin ${account_id}.dkr.ecr.us-east-1.amazonaws.com
+
+                    docker build -t ${account_id}.dkr.ecr.us-east-1.amazonaws.com/${project}/${environment}/${component}:${appVersion} .
+
+                    docker images
+
+                    docker push ${account_id}.dkr.ecr.us-east-1.amazonaws.com/${project}/${environment}/${component}:${appVersion}
+
+                    """
+                }
+            }
+        }
+        stage('Deploy $component'){
+            steps{
+                withAWS(region: 'us-east-1', credentials: 'aws-creds'){
+                    sh """
+                    aws eks update-kubeconfig --region ${region} --name ${project}-${environment}
+
+                    cd helm     
+
+                    sed -i 's/IMAGE_VERSION/${appVersion}/g' values-${environment}.yaml 
+
+                    helm upgrade --install ${componenet} -n ${project} -f values-${environment}.yaml .  
+
+                    """
+                    //dot means current folder of Dockerfile exists
+                }
             }
         }
     }
