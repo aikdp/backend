@@ -6,4 +6,4 @@ hpa:
   cpuUtilization: 12  #usually > 75
 
 configMap:
-  DB_HOST: expense-dev.c96s2yeo6pdv.us-east-1.rds.amazonaws.com #replace with RDS endpoint url, as we are using MySQL, already craeted in AWS.
+  db_host: expense-dev.c96s2yeo6pdv.us-east-1.rds.amazonaws.com #replace with RDS endpoint url, as we are using MySQL, already craeted in AWS.
