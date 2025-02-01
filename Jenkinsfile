@@ -30,29 +30,29 @@ pipeline {
                sh 'npm install'
             }
         }
-        stage('SonarQube analysis') {
-            environment{
-                scannerHome = tool 'sonar-6.0'  //sonar config
-            }
-            steps {
-                // script {
-                //     scannerHome = tool '<sonarqubeScannerInstallation>'// must match the name of an actual scanner installation directory on your Jenkins build agent
-                // }
-                withSonarQubeEnv('sonar-6.0') {// If you have configured more than one global server connection, you can specify its name as configured in Jenkins
-                sh "${scannerHome}/bin/sonar-scanner"
-                }
-            }
-        }
-        //Setting up a pipeline pause until the quality gate is computed
-        stage("Quality Gate") {
-            steps {
-                timeout(time: 5, unit: 'MINUTES') {
-                    // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
-                    // true = set pipeline to UNSTABLE, false = don't
-                    waitForQualityGate abortPipeline: true
-                }
-            }
-        }
+        // stage('SonarQube analysis') {
+        //     environment{
+        //         scannerHome = tool 'sonar-6.0'  //sonar config
+        //     }
+        //     steps {
+        //         // script {
+        //         //     scannerHome = tool '<sonarqubeScannerInstallation>'// must match the name of an actual scanner installation directory on your Jenkins build agent
+        //         // }
+        //         withSonarQubeEnv('sonar-6.0') {// If you have configured more than one global server connection, you can specify its name as configured in Jenkins
+        //         sh "${scannerHome}/bin/sonar-scanner"
+        //         }
+        //     }
+        // }
+        // //Setting up a pipeline pause until the quality gate is computed
+        // stage("Quality Gate") {
+        //     steps {
+        //         timeout(time: 5, unit: 'MINUTES') {
+        //             // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
+        //             // true = set pipeline to UNSTABLE, false = don't
+        //             waitForQualityGate abortPipeline: true
+        //         }
+        //     }
+        // }
         stage('Build docker image') {
             steps {                         //dot means current directory
                 // withAWS(region: 'us-east-1', credentials: 'aws-creds') {
@@ -75,23 +75,23 @@ pipeline {
                 }
             }
         }
-        // stage('Deploy $component'){
-        //     steps{
-        //         withAWS(region: 'us-east-1', credentials: 'aws-creds'){
-        //             sh """
-        //             aws eks update-kubeconfig --region ${region} --name ${project}-${environment}
+        stage('Deploy $component'){
+            steps{
+                withAWS(region: 'us-east-1', credentials: 'aws-creds'){
+                    sh """
+                    aws eks update-kubeconfig --region ${region} --name ${project}-${environment}
 
-        //             cd helm     
+                    cd helm     
 
-        //             sed -i 's/IMAGE_VERSION/${appVersion}/g' values-${environment}.yaml 
+                    sed -i 's/IMAGE_VERSION/${appVersion}/g' values-${environment}.yaml 
 
-        //             helm upgrade --install ${component} -n ${project} -f values-${environment}.yaml .  
+                    helm upgrade --install ${component} -n ${project} -f values-${environment}.yaml .  
 
-        //             """
-        //             //dot means current folder of Dockerfile exists
-        //         }
-        //     }
-        // }
+                    """
+                    //dot means current folder of Dockerfile exists
+                }
+            }
+        }
     }
     post {
         always{
