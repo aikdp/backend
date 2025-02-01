@@ -30,19 +30,19 @@ pipeline {
                sh 'npm install'
             }
         }
-        // stage('SonarQube analysis') {
-        //     environment{
-        //         scannerHome = tool 'sonar-6.0'  //sonar config
-        //     }
-        //     steps {
-        //         // script {
-        //         //     scannerHome = tool '<sonarqubeScannerInstallation>'// must match the name of an actual scanner installation directory on your Jenkins build agent
-        //         // }
-        //         withSonarQubeEnv('sonar-6.0') {// If you have configured more than one global server connection, you can specify its name as configured in Jenkins
-        //         sh "${scannerHome}/bin/sonar-scanner"
-        //         }
-        //     }
-        // }
+        stage('SonarQube analysis') {
+            environment{
+                scannerHome = tool 'sonar-6.0'  //sonar config
+            }
+            steps {
+                // script {
+                //     scannerHome = tool '<sonarqubeScannerInstallation>'// must match the name of an actual scanner installation directory on your Jenkins build agent
+                // }
+                withSonarQubeEnv('sonar-6.0') {// If you have configured more than one global server connection, you can specify its name as configured in Jenkins
+                sh "${scannerHome}/bin/sonar-scanner"
+                }
+            }
+        }
         // //Setting up a pipeline pause until the quality gate is computed
         // stage("Quality Gate") {
         //     steps {
