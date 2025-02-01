@@ -43,16 +43,16 @@ pipeline {
                 }
             }
         }
-        // //Setting up a pipeline pause until the quality gate is computed
-        // stage("Quality Gate") {
-        //     steps {
-        //         timeout(time: 5, unit: 'MINUTES') {
-        //             // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
-        //             // true = set pipeline to UNSTABLE, false = don't
-        //             waitForQualityGate abortPipeline: true
-        //         }
-        //     }
-        // }
+        //Setting up a pipeline pause until the quality gate is computed
+        stage("Quality Gate") {
+            steps {
+                timeout(time: 5, unit: 'MINUTES') {
+                    // Parameter indicates whether to set pipeline to UNSTABLE if Quality Gate fails
+                    // true = set pipeline to UNSTABLE, false = don't
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
         stage('Build docker image') {
             steps {                         //dot means current directory
                 // withAWS(region: 'us-east-1', credentials: 'aws-creds') {
