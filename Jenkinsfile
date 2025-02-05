@@ -83,7 +83,7 @@ pipeline {
                 expression {params.deploy}
             }
             steps{
-                build job: 'backend-cd', parameters: [      //backend-cd -->give same name your pipeline as well.
+                build job: '../backend-cd', parameters: [      //backend-cd -->give same name your pipeline as well.
                     string(name: 'version', value: "$appVersion"),
                     string(name: 'ENVIRONMENT', value: "dev"),    //here it fix, dev.
                     ], wait: true   //means, if cd sucess then only CI will sucess. otherwise pipeline fails.
