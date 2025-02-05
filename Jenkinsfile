@@ -78,7 +78,7 @@ pipeline {
                 }
             }
         }
-        stage("Deploy $component") {     //trigger backend-cd job
+        stage('Deploy ${component}') {     //trigger backend-cd job
             when {
                 expression {params.deploy}
             }
