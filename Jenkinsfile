@@ -78,14 +78,14 @@ pipeline {
                 }
             }
         }
-        stage ('Deploy ${component}') {     //trigger backend-cd job
+        stage ("Deploy ${component}") {     //trigger backend-cd job
             when {
                 expression {params.deploy}
             }
             steps{
                 build job: 'backend-cd', parameters: [      //backend-cd -->give same name your pipeline as well.
-                    string(name: 'version', value: '$appVersion'),
-                    string(name: 'ENVIRONMENT', value: 'dev'),    //here it fix, dev.
+                    string(name: 'version', value: "$appVersion"),
+                    string(name: 'ENVIRONMENT', value: "dev"),    //here it fix, dev.
                     ], wait: true   //means, if cd sucess then only CI will sucess. otherwise pipeline fails.
             }
         }
