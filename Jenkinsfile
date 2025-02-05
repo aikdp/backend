@@ -7,7 +7,7 @@ def configmap = [
 
 if(! env.BRANCH_NAME.equalsIgnoreCase('main')){   	//true, if branch is feature branch
 
-    nodeJSEKSPipeline(configMap)   //feature, this code executes
+    nodeJSEKSPipeline(configmap)   //feature, this code executes
 }
 else{
     echo "Follow the process of PROD release"       //main-->this code executes
