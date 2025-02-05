@@ -16,6 +16,7 @@ function addTransaction(amount,desc){
     }) 
     return 200;
 }
+//CHECKING when practicing SHARED Libraries
 
 function getAllTransactions(callback){
     var mysql = "SELECT * FROM transactions";
